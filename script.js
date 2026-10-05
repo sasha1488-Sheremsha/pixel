@@ -8,9 +8,12 @@ let eraser = document.querySelector('#eraser')
 let del = document.querySelector('#delete')
 let save = document.querySelector('#save')
 let fill  = document.querySelector('#fill')
-let tools = [draw, eraser , del, save, fill]
+let download  = document.querySelector('#download')
+let gridon  = document.querySelector('#grid')
+let tools = [draw, eraser , del, save, fill, download, grid]
 let color = input.value
 let PENDOWN= false
+let GRIDON = true
 
 for(let tool of tools){
     tool.addEventListener('mouseenter', function(){
@@ -28,12 +31,7 @@ input.addEventListener('input', function(e){
 eraser.addEventListener('click', function(){
     color=grid.style.backgroundColor
 })
-grid.addEventListener('mousedown', function(){
-    PENDOWN-true
-})
-grid.addEventListener('mouseup', function(){
-    PENDOWN-false
-})
+
 
 
 
@@ -49,6 +47,7 @@ function createGrid(w, h){
             pixel.id = `${i}-${j}`
 
             pixel.addEventListener('mouseover', function(){
+                console.log(PENDOWN)
                 if(PENDOWN){
                     pixel.style.backgroundColor = color
                 }
@@ -63,3 +62,36 @@ function createGrid(w, h){
     }
 }
 createGrid(W, H)
+grid.addEventListener('mousedown',()=> {PENDOWN = true})
+grid.addEventListener('mouseup',()=> {PENDOWN = false})
+
+del.addEventListener('click', function(){
+    if(confirm('Вы точно хотите удалить, это удалится навсегда!!')){
+        let pixels = document.querySelectorAll('.pixel')
+        for(let pixel of pixels){
+            pixel.style.backgroundColor = grid.style.backgroundColor
+        }
+    }
+})
+fill.addEventListener('click', function(){
+    let pixels = document.querySelectorAll('.pixel')
+    for(let pixel of pixels){
+        pixel.style.backgroundColor = color
+    }
+})
+gridon.addEventListener('click', function(){
+    let pixels = document.querySelectorAll('.border')
+    let border
+    if(GRIDON){
+        border = 'none'
+        GRIDON = false 
+        
+    }else{
+        border = ' 0.5px solid var(--muted-foreground)'
+        GRIDON= true
+    }
+    for(let pixel of pixels){
+        pixel.style.border=border
+        
+    }
+})

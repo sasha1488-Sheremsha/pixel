@@ -163,6 +163,7 @@ h1{
 }
 .pixel{
     border: 0.5px solid var(--muted-foreground);
+    user-select: none;
 }
 .pixel:hover{
     background-color: var(--secondary-foreground);
@@ -226,5 +227,17 @@ input{
     background-color: var(--muted-foreground);
     -webkit-mask: url(src/fill.svg) no-repeat center;
     mask: url(src/fill.svg) no-repeat center;
+    mask-size: cover;
+}
+#download{
+    background-color: var(--muted-foreground);
+    -webkit-mask: url(src/download.svg) no-repeat center;
+    mask: url(src/download.svg) no-repeat center;
+    mask-size: cover;
+}
+#grid{
+    background-color: var(--muted-foreground);
+    -webkit-mask: url(src/grid.svg) no-repeat center;
+    mask: url(src/grid.svg) no-repeat center;
     mask-size: cover;
 }
