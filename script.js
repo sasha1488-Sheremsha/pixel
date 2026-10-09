@@ -10,18 +10,22 @@ let save = document.querySelector('#save')
 let fill  = document.querySelector('#fill')
 let download  = document.querySelector('#download')
 let gridon  = document.querySelector('#grid')
-let tools = [draw, eraser , del, save, fill, download, grid]
+let tools = [draw, eraser , del, save, fill, download, gridon]
 let color = input.value
 let PENDOWN= false
 let GRIDON = true
 
 for(let tool of tools){
     tool.addEventListener('mouseenter', function(){
-        tool.style.backgroundColor = 'white'
+        if(tool.id!='grid' & !GRIDON){
+            tool.style.backgroundColor = 'white'
+        }
     })
 
     tool.addEventListener('mouseleave', function(){
-        tool.style.backgroundColor = ''
+        if(tool.id!='grid' & !GRIDON){
+            tool.style.backgroundColor = ''
+        }
     })
 }
 input.addEventListener('input', function(e){
@@ -61,6 +65,14 @@ function createGrid(w, h){
         }
     }
 }
+
+function save(){
+    let pixels = document.querySelectorAll('.pixel')
+    let colors = []
+    for(let pixel of pixels){
+        colors.push(pixel.style.backgroundColor)
+    }
+}
 createGrid(W, H)
 grid.addEventListener('mousedown',()=> {PENDOWN = true})
 grid.addEventListener('mouseup',()=> {PENDOWN = false})
@@ -74,24 +86,39 @@ del.addEventListener('click', function(){
     }
 })
 fill.addEventListener('click', function(){
-    let pixels = document.querySelectorAll('.pixel')
-    for(let pixel of pixels){
-        pixel.style.backgroundColor = color
+    if(confirm('Вы точно хотите закрасить все?')){
+        let pixels = document.querySelectorAll('.pixel')
+        for(let pixel of pixels){
+            pixel.style.backgroundColor = color
+        }        
     }
+
 })
 gridon.addEventListener('click', function(){
-    let pixels = document.querySelectorAll('.border')
+    let pixels = document.querySelectorAll('.pixel')
     let border
     if(GRIDON){
         border = 'none'
         GRIDON = false 
-        
+        gridon.style.backgroundColor= 'var(--muted-foreground)'
     }else{
         border = ' 0.5px solid var(--muted-foreground)'
         GRIDON= true
+        gridon.style.backgroundColor = 'var(--primary)'
+
     }
     for(let pixel of pixels){
         pixel.style.border=border
         
     }
+})
+download.addEventListener('click', function(){
+    console.log('click')
+    domtoimage.toJpeg(document.querySelector('.grid'), { quality: 0.95 })
+        .then(function (dataUrl) {
+            var link = document.createElement('a');
+            link.download = 'pixel.jpeg';
+            link.href = dataUrl;
+            link.click();
+        });
 })
